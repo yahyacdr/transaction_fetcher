@@ -5,11 +5,11 @@ const xl = require("exceljs");
   let driver = await new Builder().forBrowser(Browser.FIREFOX).build();
   try {
     let meta_data = {
-      service_index: 16,
-      service_name: "مصلحة التوليد",
+      service_index: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
+      service_name: ["المطبخ", "مصلحة التوليد"],
       en_name: "men_surgery",
-      start_date: "1/30/2024",
-      end_date: "2/1/2024",
+      start_date: "12/01/2023",
+      end_date: "01/01/2024",
       month: "december",
     };
     await driver.get("http://172.16.1.2:800/Calender/Index");
@@ -25,195 +25,167 @@ const xl = require("exceljs");
       await driver.findElement(By.id("Submit1")).click();
 
       await driver.sleep(2000);
-
+    }
+    async function switchToNewTab() {
+      await driver.switchTo().newWindow("tab");
       await driver.get("http://172.16.1.2:800/InventoryTransferRequest/index");
     }
-    await logIn()
-      .then(async (_) => await driver.sleep(5000))
-      .then(async (_) => {
-        await stimListItemClick(
-          "#saved-filters > div > div > div:nth-child(2) > div > span.k-widget.k-combobox.k-combobox-clearable > span > span.k-select > span",
-          `#search-filters_listbox > li:nth-child(${meta_data.service_index})`
-        );
-        meta_data.service_name = await driver
-          .findElement(
-            By.css(
-              `#search-filters_listbox > li:nth-child(${meta_data.service_index})`
-            )
-          )
-          .getText();
-      })
-      .then(async (_) => {
-        await clickItem(
-          await driver.findElement(
-            By.css(
-              "#MasterGrid > div:first-child table > thead > tr:first-child> th:nth-child(6) > a > span"
-            )
-          )
-        );
-      })
-      .then(async (_) => {
-        await stimEvent(
-          "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last",
-          "mouseover"
-        );
-      })
-      .then(async (_) => {
-        await clickItem(
-          await driver.findElement(
-            By.css(
-              "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last form .k-filter-menu-container span.k-widget.k-dropdown"
-            )
-          )
-        );
-      })
-      .then(async (_) => await driver.sleep(800))
-      .then(async (_) => {
-        await stimEvent(
-          "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container ul > li:nth-child(4)",
-          "click"
-        );
-      })
-      .then(async (_) => {
-        await stimInputType(
-          "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container form > div > span:nth-child(3) input",
-          meta_data.start_date
-        );
-      })
-      .then(async (_) => {
-        await clickItem(
-          await driver.findElement(By.css('span[title="Additional operator"]'))
-        );
-      })
-      .then(async (_) => {
-        await clickItem(
-          await driver.findElement(
-            By.css(
-              "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container > ul > div.k-animation-container:nth-child(5) ul > li:nth-child(6)"
-            )
-          )
-        );
-      })
-      .then(async (_) => {
-        stimInputType(
-          "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container > ul > li:first-child form > div > span:nth-child(6) input",
-          meta_data.end_date
-        );
-      })
-      .then(async (_) => await driver.sleep(3000))
-      .then(async (_) => {
-        // return;
-        // await clickItem(
-        //   await driver.findElement(
-        //     By.css(
-        //       'form[title="Show items with value that:"] div.k-action-buttons button[type="submit"][title="Filter"].k-button.k-primary'
-        //     )
-        //   )
-        // );
-        //   await driver.executeScript(() => {
-        //     document
-        //       .querySelector(
-        //         'form[title="Show items with value that:"] div.k-action-buttons button[type="submit"][title="Filter"].k-button.k-primary'
-        //       )
-        //       .click();
-        //   });
-        // })
-        const indicators = await driver.findElements(
-          By.css(
-            '#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul > li'
-          )
-        );
-        return indicators;
-      })
-      .then(async (indicators) => {
-        const items = [];
-        for (const [i, ind] of indicators.entries()) {
-          // if (i <= 2) {
-          //   continue;
-          // }
-
-          // if (i > 3) {
-          //   break;
-          // }
-          // await driver.executeScript((index) => {
-          //   document
-          //     .querySelector(
-          //       `#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul >` +
-          //         `li:nth-child(${index + 2}) a`
-          //     )
-          //     .click();
-          // }, i);
-          // return;
-          // await driver.executeScript((index) => {
-          //   console.log(index);
-          //   document
-          //     .querySelector(
-          //       `#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul >` +
-          //         index ===
-          //         0
-          //         ? `li:first-child`
-          //         : `li:nth-child(${index + 1}) a`
-          //     )
-          //     .click();
-          // }, i);
-          const li = `#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul > ${
-            i === 0 ? `li:first-child` : `li:nth-child(${i + 1}) a`
-          }`;
-          await clickItem(await driver.findElement(By.css(li)));
-          console.log(i, li);
-          await driver.sleep(1000);
-          const rowCount = await getElements(
-            `#saved-filters + div > #MasterGrid > div:nth-child(2) > table > tbody > tr`
+    await logIn();
+    for (let [i, s_i] of meta_data.service_index.entries()) {
+      if (i > 6) {
+        await switchToNewTab();
+        await fetch_transaction_data(s_i);
+      }
+    }
+    // return;
+    async function fetch_transaction_data(s_i) {
+      await driver
+        .sleep(500)
+        .then(async (_) => {
+          await stimListItemClick(
+            "#saved-filters > div > div > div:nth-child(2) > div > span.k-widget.k-combobox.k-combobox-clearable > span > span.k-select > span",
+            `#search-filters_listbox > li:nth-child(${s_i})`
           );
-          for (const [j, row] of rowCount.entries()) {
-            await fetchData(row).then((data) => items.push(...data));
+          meta_data.service_name = await driver
+            .findElement(
+              By.css(`#search-filters_listbox > li:nth-child(${s_i})`)
+            )
+            .getText();
+        })
+        .then(async (_) => {
+          await clickItem(
+            await driver.findElement(
+              By.css(
+                "#MasterGrid > div:first-child table > thead > tr:first-child> th:nth-child(6) > a > span"
+              )
+            )
+          );
+        })
+        .then(async (_) => {
+          await stimEvent(
+            "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last",
+            "mouseover"
+          );
+        })
+        .then(async (_) => {
+          await clickItem(
+            await driver.findElement(
+              By.css(
+                "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last form .k-filter-menu-container span.k-widget.k-dropdown"
+              )
+            )
+          );
+        })
+        .then(async (_) => await driver.sleep(800))
+        .then(async (_) => {
+          await stimEvent(
+            "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container ul > li:nth-child(4)",
+            "click"
+          );
+        })
+        .then(async (_) => {
+          await stimInputType(
+            "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container form > div > span:nth-child(3) input",
+            meta_data.start_date
+          );
+        })
+        .then(async (_) => {
+          await clickItem(
+            await driver.findElement(
+              By.css('span[title="Additional operator"]')
+            )
+          );
+        })
+        .then(async (_) => {
+          await clickItem(
+            await driver.findElement(
+              By.css(
+                "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container > ul > div.k-animation-container:nth-child(5) ul > li:nth-child(6)"
+              )
+            )
+          );
+        })
+        .then(async (_) => await driver.sleep(500))
+        .then(async (_) => {
+          stimInputType(
+            "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container > ul > li:first-child form > div > span:nth-child(6) input",
+            meta_data.end_date
+          );
+        })
+        .then(async (_) => await driver.sleep(2000))
+        .then(
+          async (_) =>
+            await driver
+              .findElement(
+                By.css(
+                  `button[type='submit'][title='Filter'].k-button.k-primary`
+                )
+              )
+              .click()
+        )
+        .then(async (_) => {
+          const indicators = await driver.findElements(
+            By.css(
+              '#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul > li'
+            )
+          );
+          return indicators;
+        })
+        .then(async (indicators) => {
+          const items = [];
+          for (const [i, ind] of indicators.entries()) {
+            const li = `#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul > ${
+              i === 0 ? `li:first-child` : `li:nth-child(${i + 1}) a`
+            }`;
+            await clickItem(await driver.findElement(By.css(li)));
+            await driver.sleep(3000);
+            const rowCount = await getElements(
+              `#saved-filters + div > #MasterGrid > div:nth-child(2) > table > tbody > tr`
+            );
+            for (const [j, row] of rowCount.entries()) {
+              await fetchData(row).then((data) => items.push(...data));
+            }
           }
-        }
-        items.forEach((item, i) => {
-          if (item.code !== "M0399") {
-            items.splice(i, 1);
-          }
-        });
-        console.log(items);
-        return items;
-      })
-      .then(async (items) => {
-        // const mergedItems = [];
-        // items.forEach((item) => {
-        //   // Check if the code already exists in the mergedItems array
-        //   const existingItem = mergedItems.find(
-        //     (element) => element.code === item.code
-        //   );
+          return items;
+        })
+        .then(async (items) => {
+          // const mergedItems = [];
+          // items.forEach((item) => {
+          //   // Check if the code already exists in the mergedItems array
+          //   const existingItem = mergedItems.find(
+          //     (element) => element.code === item.code
+          //   );
 
-        //   if (!existingItem) {
-        //     mergedItems.push({ ...item });
-        //   } else {
-        //     existingItem.qty = (
-        //       parseInt(existingItem.qty) + parseInt(item.qty)
-        //     ).toString();
-        //     existingItem.unitCost = (
-        //       parseInt(existingItem.unitCost) + parseInt(item.unitCost)
-        //     ).toString();
-        //   }
-        // });
-        await createTemplate(
-          items,
-          meta_data.start_date,
-          meta_data.end_date,
-          meta_data.service_name
-        );
-      })
-      .then(async () => {
-        notifier.notify({
-          title: "Task Done",
-          message: "Fetch job finished Successfully",
-          // Add an icon (optional)
-          icon: "path/to/icon.png", // Optional, absolute path to an icon
-          // Add a sound (optional)
-          sound: true, // Only Notification Center or Windows Toasters
-          wait: true, // Wait with callback, until user action is taken against notification
+          //   if (!existingItem) {
+          //     mergedItems.push({ ...item });
+          //   } else {
+          //     existingItem.qty = (
+          //       parseInt(existingItem.qty) + parseInt(item.qty)
+          //     ).toString();
+          //     existingItem.unitCost = (
+          //       parseInt(existingItem.unitCost) + parseInt(item.unitCost)
+          //     ).toString();
+          //   }
+          // });
+          await createTemplate(
+            items,
+            meta_data.start_date,
+            meta_data.end_date,
+            meta_data.service_name
+          );
+        })
+        .then(async () => {
+          notifier.notify({
+            title: "Task Done",
+            message: "Fetch job finished Successfully",
+            // Add an icon (optional)
+            icon: "path/to/icon.png", // Optional, absolute path to an icon
+            // Add a sound (optional)
+            sound: true, // Only Notification Center or Windows Toasters
+            wait: true, // Wait with callback, until user action is taken against notification
+          });
         });
-      });
+    }
 
     async function stimInputTypeWList(ele, value, list_ele) {
       await clickItem(await driver.findElement(By.css(ele)));
@@ -231,7 +203,9 @@ const xl = require("exceljs");
     }
 
     async function stimListItemClick(listBtn, item) {
+      await driver.wait(until.elementLocated(listBtn), 10000);
       await clickItem(await driver.findElement(By.css(listBtn)));
+      await driver.wait(until.elementLocated(item), 10000);
       await clickItem(await driver.findElement(By.css(item)));
     }
 
@@ -277,7 +251,7 @@ const xl = require("exceljs");
             await row.findElement(By.css(`td:first-child > a:first-child`))
           );
 
-          await driver.sleep(6000);
+          await driver.sleep(7000);
 
           const rowCount = await getElements(
             "#dvTranferReq + div.row div.k-grid-content > table > tbody > tr"
@@ -291,6 +265,11 @@ const xl = require("exceljs");
               unitCost: 0,
             };
 
+            await driver.wait(
+              until.elementLocated(row.findElement(By.css("td:nth-child(7)"))),
+              10000
+            );
+
             const name_code = await row
               .findElement(By.css("td:nth-child(7)"))
               .getAttribute("innerHTML");
@@ -298,10 +277,20 @@ const xl = require("exceljs");
             obj.code = code.trim();
             obj.name = name.trim();
 
+            await driver.wait(
+              until.elementLocated(row.findElement(By.css("td:nth-child(9)"))),
+              10000
+            );
+
             const qty = await row
               .findElement(By.css("td:nth-child(9)"))
               .getAttribute("innerHTML");
             obj.qty = qty.trim();
+
+            await driver.wait(
+              until.elementLocated(row.findElement(By.css("td:nth-child(10)"))),
+              10000
+            );
 
             const unitCost = await row
               .findElement(By.css("td:nth-child(10)"))
@@ -311,6 +300,11 @@ const xl = require("exceljs");
           }
 
           await driver.sleep(3000);
+
+          await driver.wait(
+            until.elementLocated(await driver.findElement(By.css("a.close"))),
+            10000
+          );
 
           await clickItem(await driver.findElement(By.css("a.close")));
 
@@ -912,6 +906,7 @@ const xl = require("exceljs");
     }
 
     async function clickItem(item) {
+      await driver.wait(until.elementLocated(item), 10000);
       await scrollItemToView(item);
       await driver.executeScript(`arguments[0].click()`, item);
     }
