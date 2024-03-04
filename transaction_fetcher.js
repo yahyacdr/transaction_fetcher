@@ -1,198 +1,18 @@
 const { Builder, Browser, By, Key, until } = require("selenium-webdriver");
+const notifier = require("node-notifier");
 const xl = require("exceljs");
 (async function example() {
   let driver = await new Builder().forBrowser(Browser.FIREFOX).build();
   try {
     let meta_data = {
-      service_index: 7,
-      service_name: "مصلحة الرجال",
+      service_index: 16,
+      service_name: "مصلحة التوليد",
       en_name: "men_surgery",
-      start_date: "12/1/2023",
-      end_date: "1/1/2024",
+      start_date: "1/30/2024",
+      end_date: "2/1/2024",
       month: "december",
     };
     await driver.get("http://172.16.1.2:800/Calender/Index");
-
-    // const data = [
-    //   {
-    //     code: "M0339",
-    //     name: "ساشي خيط صفراء صغيرة",
-    //     qty: "1",
-    //     unitCost: "86",
-    //   },
-    //   {
-    //     code: "M0267",
-    //     name: "صابون سائل غسول اليدين",
-    //     qty: "1",
-    //     unitCost: "69.9",
-    //   },
-    //   { code: "M0268", name: "معطر الجو", qty: "1", unitCost: "190" },
-    //   { code: "M0264", name: "ممسحة ارضيات", qty: "2", unitCost: "71" },
-    //   { code: "M0224", name: "مناديل مبللة", qty: "1", unitCost: "80" },
-    //   {
-    //     code: "M0149",
-    //     name: "مناديل ورقيه (بابي سيرفات)",
-    //     qty: "30",
-    //     unitCost: "32",
-    //   },
-    //   {
-    //     code: "5154",
-    //     name: "ساشي بوبيل سوداء غردائية",
-    //     qty: "1",
-    //     unitCost: "220",
-    //   },
-    //   {
-    //     code: "5153",
-    //     name: "ساشي بوبيل صفراء حجم كبير",
-    //     qty: "1",
-    //     unitCost: "169.95",
-    //   },
-    //   {
-    //     code: "M0276",
-    //     name: "ساشي سوداء خيط حجم صغير",
-    //     qty: "1",
-    //     unitCost: "86",
-    //   },
-    //   { code: "M0268", name: "معطر الجو", qty: "1", unitCost: "190" },
-    //   { code: "M0114", name: "سائل الاواني", qty: "1.5", unitCost: "60" },
-    //   { code: "M111", name: "صانيبوا", qty: "3.5", unitCost: "30" },
-    //   { code: "M0419", name: "RAM 90*90", qty: "2", unitCost: "45" },
-    //   { code: "M0433", name: "RAM A3 160G", qty: "4", unitCost: "1800" },
-    //   { code: "M0396", name: "RAM A4 ENTET", qty: "2", unitCost: "2365" },
-    //   { code: "M0329", name: "قلم ارزق", qty: "5", unitCost: "22.5" },
-    //   { code: "M0252", name: "DVD VIERGE", qty: "150", unitCost: "57" },
-    //   { code: "M0391", name: "وسادة", qty: "2", unitCost: "480" },
-    //   {
-    //     code: "5154",
-    //     name: "ساشي بوبيل سوداء غردائية",
-    //     qty: "15",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0378",
-    //     name: "ساشي خيط صفراء حجم كبير",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0339",
-    //     name: "ساشي خيط صفراء صغيرة",
-    //     qty: "15",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0276",
-    //     name: "ساشي سوداء خيط حجم صغير",
-    //     qty: "15",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0267",
-    //     name: "صابون سائل غسول اليدين",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   { code: "M0297", name: "ليقو ميناج", qty: "1", unitCost: "0" },
-    //   { code: "M0268", name: "معطر الجو", qty: "2", unitCost: "0" },
-    //   { code: "M0264", name: "ممسحة ارضيات", qty: "2", unitCost: "0" },
-    //   {
-    //     code: "100032",
-    //     name: "ENVELOPE F30 CLILIQUE IBN HAYANE",
-    //     qty: "500",
-    //     unitCost: "14.86",
-    //   },
-    //   {
-    //     code: "M0309",
-    //     name: "ENVELOPE RADIO",
-    //     qty: "25",
-    //     unitCost: "67.5",
-    //   },
-    //   { code: "M0433", name: "RAM A3 160G", qty: "4", unitCost: "1800" },
-    //   {
-    //     code: "M0359",
-    //     name: "بوشات ايكوغرافي",
-    //     qty: "1",
-    //     unitCost: "38.9",
-    //   },
-    //   {
-    //     code: "M0149",
-    //     name: "مناديل ورقيه (بابي سيرفات)",
-    //     qty: "29",
-    //     unitCost: "32",
-    //   },
-    //   { code: "M0252", name: "DVD VIERGE", qty: "3", unitCost: "0" },
-    //   {
-    //     code: "M0399",
-    //     name: "TONER (NOIR/BLANCHE)",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   { code: "M0398", name: "رلولو كود بار", qty: "2", unitCost: "0" },
-    //   {
-    //     code: "M0378",
-    //     name: "ساشي خيط صفراء حجم كبير",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0339",
-    //     name: "ساشي خيط صفراء صغيرة",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0276",
-    //     name: "ساشي سوداء خيط حجم صغير",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0346",
-    //     name: "شريط لاصق حجم صغير",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0303",
-    //     name: "صابون حجرة سائل 3L",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   {
-    //     code: "M0267",
-    //     name: "صابون سائل غسول اليدين",
-    //     qty: "2",
-    //     unitCost: "0",
-    //   },
-    //   { code: "M0405", name: "عمارة جرافيز", qty: "2", unitCost: "0" },
-    //   { code: "M0329", name: "قلم ارزق", qty: "6", unitCost: "0" },
-    //   { code: "M0342", name: "قلم اسود", qty: "2", unitCost: "0" },
-    //   { code: "M0323", name: "كأس بلاستيك", qty: "96", unitCost: "0" },
-    //   { code: "M0268", name: "معطر الجو", qty: "2", unitCost: "0" },
-    //   { code: "M0264", name: "ممسحة ارضيات", qty: "1", unitCost: "0" },
-    //   { code: "M109", name: "ممسحة الغبار", qty: "1", unitCost: "0" },
-    //   { code: "M0224", name: "مناديل مبللة", qty: "2", unitCost: "0" },
-    //   { code: "M0309", name: "ENVELOPE RADIO", qty: "1400", unitCost: "0" },
-    //   { code: "M0252", name: "DVD VIERGE", qty: "2", unitCost: "2750" },
-    //   { code: "M0114", name: "سائل الاواني", qty: "1", unitCost: "0" },
-    //   {
-    //     code: "M0267",
-    //     name: "صابون سائل غسول اليدين",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   { code: "M0268", name: "معطر الجو", qty: "2", unitCost: "0" },
-    //   { code: "M0114", name: "سائل الاواني", qty: "1", unitCost: "0" },
-    //   {
-    //     code: "M0267",
-    //     name: "صابون سائل غسول اليدين",
-    //     qty: "1",
-    //     unitCost: "0",
-    //   },
-    //   { code: "M0268", name: "معطر الجو", qty: "2", unitCost: "0" },
-    // ];
-
-    // await createXlTable(data);
 
     // ENTER USERNAME & PASSWORD
     async function logIn() {
@@ -210,16 +30,21 @@ const xl = require("exceljs");
     }
     await logIn()
       .then(async (_) => await driver.sleep(5000))
-      .then(
-        async (_) =>
-          await stimListItemClick(
-            "#saved-filters > div > div > div:nth-child(2) > div > span.k-widget.k-combobox.k-combobox-clearable > span > span.k-select > span",
-            `#search-filters_listbox > li:nth-child(${meta_data.service_index})`
-          )
-      )
       .then(async (_) => {
-        await driver.executeScript(
-          `arguments[0].click()`,
+        await stimListItemClick(
+          "#saved-filters > div > div > div:nth-child(2) > div > span.k-widget.k-combobox.k-combobox-clearable > span > span.k-select > span",
+          `#search-filters_listbox > li:nth-child(${meta_data.service_index})`
+        );
+        meta_data.service_name = await driver
+          .findElement(
+            By.css(
+              `#search-filters_listbox > li:nth-child(${meta_data.service_index})`
+            )
+          )
+          .getText();
+      })
+      .then(async (_) => {
+        await clickItem(
           await driver.findElement(
             By.css(
               "#MasterGrid > div:first-child table > thead > tr:first-child> th:nth-child(6) > a > span"
@@ -234,8 +59,7 @@ const xl = require("exceljs");
         );
       })
       .then(async (_) => {
-        await driver.executeScript(
-          `arguments[0].click()`,
+        await clickItem(
           await driver.findElement(
             By.css(
               "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last form .k-filter-menu-container span.k-widget.k-dropdown"
@@ -257,14 +81,12 @@ const xl = require("exceljs");
         );
       })
       .then(async (_) => {
-        await driver.executeScript(
-          `arguments[0].click()`,
+        await clickItem(
           await driver.findElement(By.css('span[title="Additional operator"]'))
         );
       })
       .then(async (_) => {
-        await driver.executeScript(
-          `arguments[0].click()`,
+        await clickItem(
           await driver.findElement(
             By.css(
               "body > div:last-child ul > li.k-item.k-menu-item.k-filter-item.k-state-default.k-last > .k-animation-container > ul > div.k-animation-container:nth-child(5) ul > li:nth-child(6)"
@@ -280,17 +102,22 @@ const xl = require("exceljs");
       })
       .then(async (_) => await driver.sleep(3000))
       .then(async (_) => {
-        return;
-        await driver.executeScript(
-          `arguments[0].click()`,
-          await driver.findElement(
-            By.css(
-              'a[title="Go to the last page"][aria-label="Go to the last page"]'
-            )
-          )
-        );
-      })
-      .then(async (_) => {
+        // return;
+        // await clickItem(
+        //   await driver.findElement(
+        //     By.css(
+        //       'form[title="Show items with value that:"] div.k-action-buttons button[type="submit"][title="Filter"].k-button.k-primary'
+        //     )
+        //   )
+        // );
+        //   await driver.executeScript(() => {
+        //     document
+        //       .querySelector(
+        //         'form[title="Show items with value that:"] div.k-action-buttons button[type="submit"][title="Filter"].k-button.k-primary'
+        //       )
+        //       .click();
+        //   });
+        // })
         const indicators = await driver.findElements(
           By.css(
             '#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul > li'
@@ -301,8 +128,40 @@ const xl = require("exceljs");
       .then(async (indicators) => {
         const items = [];
         for (const [i, ind] of indicators.entries()) {
-          ind.click();
-          await driver.sleep(2000);
+          // if (i <= 2) {
+          //   continue;
+          // }
+
+          // if (i > 3) {
+          //   break;
+          // }
+          // await driver.executeScript((index) => {
+          //   document
+          //     .querySelector(
+          //       `#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul >` +
+          //         `li:nth-child(${index + 2}) a`
+          //     )
+          //     .click();
+          // }, i);
+          // return;
+          // await driver.executeScript((index) => {
+          //   console.log(index);
+          //   document
+          //     .querySelector(
+          //       `#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul >` +
+          //         index ===
+          //         0
+          //         ? `li:first-child`
+          //         : `li:nth-child(${index + 1}) a`
+          //     )
+          //     .click();
+          // }, i);
+          const li = `#MasterGrid a[aria-label="Go to the previous page"][title="Go to the previous page"] + div > ul > ${
+            i === 0 ? `li:first-child` : `li:nth-child(${i + 1}) a`
+          }`;
+          await clickItem(await driver.findElement(By.css(li)));
+          console.log(i, li);
+          await driver.sleep(1000);
           const rowCount = await getElements(
             `#saved-filters + div > #MasterGrid > div:nth-child(2) > table > tbody > tr`
           );
@@ -310,18 +169,54 @@ const xl = require("exceljs");
             await fetchData(row).then((data) => items.push(...data));
           }
         }
+        items.forEach((item, i) => {
+          if (item.code !== "M0399") {
+            items.splice(i, 1);
+          }
+        });
+        console.log(items);
         return items;
       })
-      .then(
-        async (items) =>
-          await createXlTable(items, meta_data.en_name, meta_data.month)
-      );
+      .then(async (items) => {
+        // const mergedItems = [];
+        // items.forEach((item) => {
+        //   // Check if the code already exists in the mergedItems array
+        //   const existingItem = mergedItems.find(
+        //     (element) => element.code === item.code
+        //   );
+
+        //   if (!existingItem) {
+        //     mergedItems.push({ ...item });
+        //   } else {
+        //     existingItem.qty = (
+        //       parseInt(existingItem.qty) + parseInt(item.qty)
+        //     ).toString();
+        //     existingItem.unitCost = (
+        //       parseInt(existingItem.unitCost) + parseInt(item.unitCost)
+        //     ).toString();
+        //   }
+        // });
+        await createTemplate(
+          items,
+          meta_data.start_date,
+          meta_data.end_date,
+          meta_data.service_name
+        );
+      })
+      .then(async () => {
+        notifier.notify({
+          title: "Task Done",
+          message: "Fetch job finished Successfully",
+          // Add an icon (optional)
+          icon: "path/to/icon.png", // Optional, absolute path to an icon
+          // Add a sound (optional)
+          sound: true, // Only Notification Center or Windows Toasters
+          wait: true, // Wait with callback, until user action is taken against notification
+        });
+      });
 
     async function stimInputTypeWList(ele, value, list_ele) {
-      await driver.executeScript(
-        `arguments[0].click()`,
-        await driver.findElement(By.css(ele))
-      );
+      await clickItem(await driver.findElement(By.css(ele)));
       await driver.sleep(1000);
       await driver.executeScript(
         `arguments[0].value = '${value}'`,
@@ -332,31 +227,16 @@ const xl = require("exceljs");
         await driver.findElement(By.css(ele))
       );
       await driver.sleep(1000);
-      await driver.executeScript(
-        `arguments[0].click()`,
-        await driver.findElement(By.css(list_ele))
-      );
+      await clickItem(await driver.findElement(By.css(list_ele)));
     }
 
     async function stimListItemClick(listBtn, item) {
-      await driver
-        .executeScript(
-          `arguments[0].click()`,
-          await driver.findElement(By.css(listBtn))
-        )
-        .then(async (_) => {
-          await driver.executeScript(
-            `arguments[0].click()`,
-            await driver.findElement(By.css(item))
-          );
-        });
+      await clickItem(await driver.findElement(By.css(listBtn)));
+      await clickItem(await driver.findElement(By.css(item)));
     }
 
     async function stimInputType(ele, value) {
-      await driver.executeScript(
-        `arguments[0].click()`,
-        await driver.findElement(By.css(ele))
-      );
+      await clickItem(await driver.findElement(By.css(ele)));
       await driver.sleep(500);
       await driver.executeScript(
         `arguments[0].value = '${value}'`,
@@ -393,8 +273,7 @@ const xl = require("exceljs");
         const data = [];
 
         try {
-          await driver.executeScript(
-            `arguments[0].click()`,
+          await clickItem(
             await row.findElement(By.css(`td:first-child > a:first-child`))
           );
 
@@ -431,12 +310,9 @@ const xl = require("exceljs");
             data.push(obj);
           }
 
-          await driver.sleep(6000);
+          await driver.sleep(3000);
 
-          await driver.executeScript(
-            `arguments[0].click()`,
-            await driver.findElement(By.css("a.close"))
-          );
+          await clickItem(await driver.findElement(By.css("a.close")));
 
           await driver.sleep(2000);
 
@@ -467,8 +343,589 @@ const xl = require("exceljs");
         .writeFile(filePath)
         .then((_) => console.log(`Excel file has been created successfully`));
     }
+
+    async function createTemplate(items, start_date, end_date, service_name) {
+      await driver.executeScript(
+        (items, start_date, end_date, service_name) => {
+          let report = `<head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Report</title>
+      </head>
+    
+      <body>
+        <style>
+        /*
+        * Prefixed by https://autoprefixer.github.io
+        * PostCSS: v8.4.14,
+        * Autoprefixer: v10.4.7
+        * Browsers: last 4 version
+        */
+        
+                  @import url("https://fonts.googleapis.com/css2?family=Changa:wght@200;300;400;500;600;700;800&display=swap");
+            
+                  *,
+                  *::before,
+                  *::after {
+                    -webkit-box-sizing: border-box;
+                            box-sizing: border-box;
+                    padding: 0;
+                    margin: 0;
+                    font-family: "Changa", sans-serif;
+                  }
+            
+                  html {
+                    font-size: 12px;
+                  }
+            
+                  .report {
+                    width: 1080.06px;
+                    width: 720.36px;
+                    /* height: 507.626px; */
+                    background-color: window;
+                    padding: 0;
+                    position: relative;
+            
+                    input {
+                      border: none;
+                      text-align: center;
+                    }
+                    input[type="number"] {
+                      width: 80px;
+                      font-size: 1rem;
+                    }
+            
+                    header {
+                      background-color: black;
+                      display: -webkit-box;
+                      display: -ms-flexbox;
+                      display: flex;
+                      -webkit-box-pack: center;
+                          -ms-flex-pack: center;
+                              justify-content: center;
+                      -webkit-box-align: center;
+                          -ms-flex-align: center;
+                              align-items: center;
+                      width: 100%;
+                      height: 12vh;
+                      padding: 10px 10px;
+            
+                      .title-date {
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -webkit-box-orient: vertical;
+                        -webkit-box-direction: normal;
+                            -ms-flex-direction: column;
+                                flex-direction: column;
+                        -webkit-box-pack: justify;
+                            -ms-flex-pack: justify;
+                                justify-content: space-between;
+                        -webkit-box-align: center;
+                            -ms-flex-align: center;
+                                align-items: center;
+                        color: white;
+                        width: 45%;
+                        direction: rtl;
+                        height: 100%;
+            
+                        .date {
+                          width: 75%;
+                          display: -webkit-box;
+                          display: -ms-flexbox;
+                          display: flex;
+                          -webkit-box-pack: justify;
+                              -ms-flex-pack: justify;
+                                  justify-content: space-between;
+                          -webkit-box-align: center;
+                              -ms-flex-align: center;
+                                  align-items: center;
+                          padding-top: 30px;
+                          font-size: 1.05rem;
+                        }
+                      }
+                    }
+            
+                    main {
+                      display: -webkit-box;
+                      display: -ms-flexbox;
+                      display: flex;
+                      -webkit-box-orient: vertical;
+                      -webkit-box-direction: normal;
+                          -ms-flex-direction: column;
+                              flex-direction: column;
+                      -webkit-box-pack: justify;
+                          -ms-flex-pack: justify;
+                              justify-content: space-between;
+                      -webkit-box-align: center;
+                          -ms-flex-align: center;
+                              align-items: center;
+                      position: relative;
+            
+                      .top {
+                        width: 100%;
+                        padding: 30px 0;
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -webkit-box-pack: center;
+                            -ms-flex-pack: center;
+                                justify-content: center;
+                        -webkit-box-align: center;
+                            -ms-flex-align: center;
+                                align-items: center;
+            
+                        > div {
+                          direction: rtl;
+                          width: 100%;
+                          display: -webkit-box;
+                          display: -ms-flexbox;
+                          display: flex;
+                          -webkit-box-pack: center;
+                              -ms-flex-pack: center;
+                                  justify-content: center;
+                          -webkit-box-align: center;
+                              -ms-flex-align: center;
+                                  align-items: center;
+                          font-size: 1.4rem;
+                          font-weight: 600;
+                        }
+                        input {
+                          text-align: center;
+                          font-size: 1.4rem;
+                          font-weight: 600;
+                        }
+                      }
+            
+                      table {
+                        direction: rtl;
+                        border: 1px solid black;
+                        width: 100%;
+                        border-spacing: 0;
+            
+                        thead {
+                          th:not(:last-child) {
+                            border-left: 1px solid black;
+                          }
+            
+                          th {
+                            padding: 10px;
+                            background-color: #eeece1;
+                            font-size: 1rem;
+                          }
+            
+                          th:first-child {
+                            width: 11%;
+                          }
+                          th:nth-child(2) {
+                            width: 33%;
+                          }
+                          th:nth-child(3) {
+                            width: 16%;
+                          }
+                          th:nth-child(4) {
+                            width: 16%;
+                          }
+                          th:nth-child(5) {
+                            width: 24%;
+                          }
+                        }
+            
+                        & tbody {
+                          tr {
+                            td {
+                              text-align: center;
+                              padding: 10px;
+                              font-size: 1rem;
+                            }
+            
+                            td:first-child {
+                              input {
+                                width: 50px;
+                              }
+                            }
+            
+                            td:not(:last-child) {
+                              border-left: 1px solid black;
+                            }
+            
+                            textarea {
+                              overflow-wrap: break-word;
+                              width: 100%;
+                              height: 27px;
+                              text-align: justify;
+                              resize: none;
+                              border: none;
+                              overflow-y: hidden;
+                            }
+                          }
+            
+                          tr:first-child {
+                            td {
+                              border-top: 1px solid black;
+                            }
+                          }
+            
+                          tr:not(:last-child) {
+                            td {
+                              border-bottom: 1px solid black;
+                            }
+                          }
+                          .highlight {
+                            -webkit-box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
+                                    box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.2);
+                          }
+                        }
+                        & tfoot {
+                          display: table-footer-group;
+                          vertical-align: middle;
+                          border: inherit;
+                          tr {
+                            td {
+                              text-align: center;
+                              padding: 10px;
+                              font-size: 1rem;
+                              border-top: 1px solid black;
+                            }
+                            td:not(:last-child) {
+                              border-left: 1px solid black;
+                            }
+                          }
+                        }
+                      }
+                      .add-row-btn {
+                        position: absolute;
+                        bottom: 0;
+                        right: 0;
+                        width: 15px;
+                        height: 15px;
+                        background-color: transparent;
+                        button {
+                          width: 100%;
+                          height: 100%;
+                          border: none;
+                          background-color: transparent;
+                          position: relative;
+                          top: 0px;
+                          cursor: crosshair;
+                        }
+                      }
+                    }
+            
+                    .context-menu {
+                      list-style: none;
+                      width: 300px;
+                      display: none;
+                      -webkit-box-pack: start;
+                          -ms-flex-pack: start;
+                              justify-content: flex-start;
+                      -webkit-box-align: center;
+                          -ms-flex-align: center;
+                              align-items: center;
+                      position: absolute;
+                      background-color: #171717;
+                      border-radius: 4px;
+                      padding: 10px 10px;
+                      li {
+                        color: white;
+                        font-size: 1rem;
+                        width: 100%;
+                        cursor: pointer;
+                        padding: 4px;
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -webkit-box-pack: justify;
+                            -ms-flex-pack: justify;
+                                justify-content: space-between;
+                        -webkit-box-align: center;
+                            -ms-flex-align: center;
+                                align-items: center;
+                        border-radius: 4px;
+                        img {
+                          width: 18px;
+                          height: 18px;
+                        }
+                      }
+                      li:hover {
+                        background-color: #212121;
+                      }
+                    }
+            
+                    footer {
+                      display: -webkit-box;
+                      display: -ms-flexbox;
+                      display: flex;
+                      -webkit-box-pack: center;
+                          -ms-flex-pack: center;
+                              justify-content: center;
+                      -webkit-box-align: end;
+                          -ms-flex-align: end;
+                              align-items: flex-end;
+                      padding: 70px 0 0;
+            
+                      > div {
+                        display: -webkit-box;
+                        display: -ms-flexbox;
+                        display: flex;
+                        -webkit-box-pack: justify;
+                            -ms-flex-pack: justify;
+                                justify-content: space-between;
+                        -webkit-box-align: center;
+                            -ms-flex-align: center;
+                                align-items: center;
+                        width: 50%;
+            
+                        p,
+                        input {
+                          font-size: 1.2rem;
+                          font-weight: bold;
+                        }
+                      }
+                    }
+                  }
+        </style>
+    
+        <div class="report">
+          <header>
+            <div class="title-date">
+              <h1>التقرير الربع سنوي للإستهلاك</h1>
+              <div class="date">
+                <p>من:&nbsp;</p>
+                <p class="theDate">${start_date}</p>
+                <p>إلى:&nbsp;</p>
+                <p class="theDate">${end_date}</p>
+              </div>
+            </div>
+          </header>
+          <main>
+            <div class="top">
+              <div class="to-wrh">
+                <p>قسم:&nbsp;</p>
+                <input type="text" class="toWrh" value="الأشعة" />
+              </div>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>رمز الصنف</th>
+                  <th>اسم الصنف</th>
+                  <th>الكمية</th>
+                  <th>القيمة</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-i="1">
+                  <td class="code"><input type="text" value="M0296" /></td>
+                  <td class="name">
+                    <input type="text" value="TERMOMETRE INFLA" />
+                  </td>
+                  <td class="qty">
+                    <input type="number" value="01" />
+                  </td>
+                  <td class="price"><input type="number" /></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2">المجموع</td>
+                  <td class="qty-sum">55</td>
+                  <td class="price-sum">55</td>
+                </tr>
+              </tfoot>
+            </table>
+            <div class="add-row-btn">
+              <button type="button"></button>
+            </div>
+            <ol class="context-menu">
+              <li>
+                Delete
+                <img src="https://i.ibb.co/CK4VCj2/bin.png" alt="bin" border="0" />
+              </li>
+            </ol>
+          </main>
+          <footer>
+            <div class="sign">
+              <p>المخزني</p>
+              <p><input type="text" value="المستلم" /></p>
+            </div>
+          </footer>
+        </div>
+        </body>`;
+          let html = document.querySelector("html");
+          html.className = "";
+          while (html.firstChild) {
+            html.removeChild(html.firstChild);
+          }
+          html.innerHTML = report;
+          let body = document.querySelector("body");
+          let addRowBtn = body.querySelector("main .add-row-btn button");
+          let contextmenu = body.querySelector(".context-menu");
+          let deleteBtn = body.querySelector("ol li");
+
+          document.querySelector("input.toWrh").value = service_name;
+          let rowInstance = document
+            .querySelector("table > tbody > tr:first-child")
+            .cloneNode(true);
+          let tbody = document.querySelector("table > tbody");
+
+          addRowBtn.addEventListener("click", addRow);
+
+          function addRow() {
+            tbody.appendChild(rowInstance);
+            rowInstance = tbody.querySelector("tr").cloneNode(true);
+          }
+
+          let qtySum = 0;
+          let priceSum = 0;
+          items.forEach((p) => {
+            rowInstance.querySelector(".code input").value = p.code;
+            rowInstance.querySelector(".name input").value = p.name;
+            rowInstance.querySelector(".qty input").value =
+              p.qty < 10 ? "0" + p.qty : p.qty;
+            rowInstance.querySelector(".price input").value =
+              p.unitCost * p.qty < 10
+                ? "0" + p.unitCost * p.qty
+                : p.unitCost * p.qty;
+            tbody.appendChild(rowInstance);
+            rowInstance = tbody.querySelector("tr").cloneNode(true);
+            qtySum += p.qty;
+            priceSum += p.unitCost * p.qty;
+          });
+
+          arrangeRows();
+
+          document.querySelector("tfoot .qty-sum").innerHTML = qtySum;
+          document.querySelector("tfoot .price-sum").innerHTML = priceSum;
+
+          document.addEventListener("keydown", function (event) {
+            if (event.altKey && event.key === "+") {
+              addRow();
+            }
+          });
+
+          let allInputs = body.querySelectorAll("table input");
+
+          allInputs.forEach((input) => {
+            input.addEventListener("input", (e) => {
+              if (e.target.parentElement.classList.contains("qty")) {
+                document.querySelector("tfoot .qty-sum").innerHTML = countSum(
+                  ".qty > input",
+                  false
+                );
+              }
+              if (e.target.parentElement.classList.contains("price")) {
+                document.querySelector("tfoot .price-sum").innerHTML = countSum(
+                  ".price > input",
+                  false
+                );
+              }
+            });
+          });
+
+          function countSum(className, both) {
+            if (!both) {
+              const sum = Array.from(
+                document.querySelectorAll(className),
+                (input) => +input.value
+              ).reduce((curr, acc) => {
+                return curr + acc;
+              }, 0);
+              return sum;
+            } else {
+              document.querySelector(".qty-sum").innerHTML = Array.from(
+                document.querySelectorAll(".qty > input"),
+                (input) => +input.value
+              )
+                .reduce((curr, acc) => {
+                  return curr + acc;
+                }, 0)
+                .toFixed(2);
+
+              document.querySelector(".price-sum").innerHTML = Array.from(
+                document.querySelectorAll(".price > input"),
+                (input) => +input.value
+              )
+                .reduce((curr, acc) => {
+                  return curr + acc;
+                }, 0)
+                .toFixed(2);
+            }
+          }
+
+          tbody.addEventListener("contextmenu", (e) => {
+            let rows = tbody.querySelectorAll("tr");
+            if (e.target.tagName === "TD") {
+              e.preventDefault();
+              rows.forEach((row) => row.classList.remove("highlight"));
+              e.target.parentElement.classList.add("highlight");
+              contextmenu.style = `display: flex; top: ${e.clientY}px; left: ${e.clientX}px`;
+              contextmenu.setAttribute(
+                "current-i",
+                e.target.parentElement.getAttribute("data-i")
+              );
+            }
+          });
+
+          document.addEventListener("click", function (event) {
+            const specificElement = tbody.querySelectorAll(".highlight");
+
+            specificElement.forEach((se) => {
+              if (!se.contains(event.target) && event.target !== se) {
+                se.classList.remove("highlight");
+                contextmenu.style.display = "none";
+              }
+            });
+          });
+
+          deleteBtn.addEventListener("click", () => {
+            let deleteRow = tbody.querySelector(
+              `tr[data-i="${deleteBtn.parentElement.getAttribute(
+                "current-i"
+              )}"]`
+            );
+            deleteRow.parentElement.removeChild(deleteRow);
+            contextmenu.style.display = "none";
+            arrangeRows();
+            countSum("", true);
+          });
+
+          function arrangeRows() {
+            let rows = tbody.querySelectorAll("tbody tr");
+            rows.forEach((row, i) => {
+              row.setAttribute("data-i", i + 1 < 10 ? "0" + (i + 1) : i + 1);
+            });
+          }
+
+          tbody.querySelector("tr").remove();
+        },
+        items,
+        start_date,
+        end_date,
+        service_name
+      );
+    }
+
+    async function scrollItemToView(item) {
+      await driver.executeScript("arguments[0].scrollIntoView(true);", item);
+      await driver.sleep(500);
+    }
+
+    async function clickItem(item) {
+      await scrollItemToView(item);
+      await driver.executeScript(`arguments[0].click()`, item);
+    }
   } catch (e) {
     console.error(e);
+    notifier.notify({
+      title: "Task Failed",
+      message: "Error occurred while fetching",
+      // Add an icon (optional)
+      icon: "path/to/icon.png", // Optional, absolute path to an icon
+      // Add a sound (optional)
+      sound: true, // Only Notification Center or Windows Toasters
+      wait: true, // Wait with callback, until user action is taken against notification
+    });
   } finally {
     // await driver.quit();
   }
