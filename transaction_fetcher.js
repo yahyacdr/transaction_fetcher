@@ -1,5 +1,6 @@
 const { Builder, Browser, By, Key, until } = require("selenium-webdriver");
 const notifier = require("node-notifier");
+const { StaleElementReferenceError } = require("selenium-webdriver").error;
 const xl = require("exceljs");
 (async function example() {
   let driver = await new Builder().forBrowser(Browser.FIREFOX).build();
@@ -34,6 +35,15 @@ const xl = require("exceljs");
     for (let [i, s_i] of meta_data.service_index.entries()) {
       await switchToNewTab();
       await fetch_transaction_data(s_i);
+      notifier.notify({
+        title: "Final Task Done",
+        message: "Fetch job finished Successfully",
+        // Add an icon (optional)
+        icon: "path/to/icon.png", // Optional, absolute path to an icon
+        // Add a sound (optional)
+        sound: true, // Only Notification Center or Windows Toasters
+        wait: true, // Wait with callback, until user action is taken against notification
+      });
     }
     // return;
     async function fetch_transaction_data(s_i) {
@@ -320,14 +330,29 @@ const xl = require("exceljs");
     }
 
     async function getElements(ele) {
-      // Iterate through each element and wait for visibility
-      await driver.wait(until.elementsLocated(By.css(ele)), 60000);
-      // const elements = await driver.findElements(By.css(ele));
-      // for (const element of elements) {
-      //   await driver.wait(until.elementIsVisible(element), 60000);
-      // }
-      const rowCount = await driver.findElements(By.css(ele));
-      return rowCount;
+      let elements;
+      for (let retry = 0; retry < 6; retry++) {
+        // Retry up to 3 times
+        try {
+          // Locate the elements
+          await driver.wait(until.elementsLocated(By.css(ele)), 60000);
+          elements = await driver.findElements(By.css(ele));
+
+          // Wait for one of the elements to become visible
+          await driver.wait(until.elementIsVisible(elements[0]), 60000);
+
+          // Return the elements if they are still valid
+          await driver.findElements(By.css(ele)); // Ensure elements are still valid
+          return elements;
+        } catch (error) {
+          if (error instanceof StaleElementReferenceError) {
+            console.log("Stale element reference encountered, retrying...");
+          } else {
+            throw error; // Re-throw other errors
+          }
+        }
+      }
+      throw new Error("Failed to locate elements after multiple retries");
     }
 
     async function createXlTable(data, service, month) {
